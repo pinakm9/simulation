@@ -8,13 +8,13 @@ from math import gamma
 alpha, beta = float(sys.argv[1]), float(sys.argv[2])
 
 # target probability density
-def target_density(x):
+def target_density(x, *args):
     try:
         return alpha*beta*np.exp(-alpha*x**beta)*x**(beta-1)
     except OverflowError as Error:
         return 0.0
 # inverse of the target distribution
-def inv_dist(y):
+def inv_dist(y, *args):
     return (-np.log(1-y)/alpha)**(1.0/beta)
 
 c = alpha**(-1.0/beta)

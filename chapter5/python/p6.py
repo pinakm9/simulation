@@ -3,11 +3,11 @@ from simulate import InverseTransform
 
 c = 1.0-np.exp(-0.05)
 # target probability distribution
-def target_dist(x):
+def target_dist(x, *args):
     return (1.0 - np.exp(-x))/c
 
 # inverse of the target distribution
-def inv_dist(y):
+def inv_dist(y, *args):
     return -np.log(1.0-c*y)
 
 it = InverseTransform(inv_dist)
