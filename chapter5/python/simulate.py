@@ -1,15 +1,23 @@
-import random
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from scipy.stats import rv_continuous
 from statsmodels.distributions.empirical_distribution import ECDF
+from random import uniform
 from utility import timer
+
+# A class for defining generic continuous random variables
+class RVContinuous(rv_continuous):
+    def __init__(self, pdf):
+        self.pdf = pdf
+    def _pdf(self, x, *args):
+        return self.pdf(x, *args)
 
 # A bare-bones base class for algorithms that simulate a random variable
 class Simulation(object):
     def __init__(self):
         self.method = None # method of simulation/sampling
+        self.uniform  = uniform
 
     # generates samples using self.method
     @timer
@@ -55,16 +63,14 @@ class Simulation(object):
     @timer
     def visualize(self, target_density, range_, pts = 100, file_path = None, display = False):
         # Base class for a custom continuous random variable
-        class RandomVar(rv_continuous):
-            def _pdf(self, x):
-                return target_density(x)
-        self.rv = RandomVar() # creates the target random variable
+        self.rv = RVContinuous(target_density) # creates the target random variable
         self.target_mean = self.rv.mean()
         self.target_var = self.rv.var()
         self.draw(target_density, range_, pts, file_path, display)
 
 
     # generates a plot juxtaposing the target with the simulated distribution given the mean and variance of the target distribution
+    # suffix 'man' indicates you have to supply target_mean, target_dist manually to the function
     @timer
     def vis_man(self, target_density, range_, target_mean, target_var, pts = 100, file_path = None, display = False):
         self.target_mean = target_mean
@@ -82,7 +88,7 @@ class Simulation(object):
 class InverseTransform(Simulation):
     def __init__(self, inv_dist):
         Simulation.__init__(self)
-        self.method = lambda: inv_dist(random.uniform(0.0, 1.0))
+        self.method = lambda *args: inv_dist(self.uniform(0.0, 1.0))
 
 # Implements composition method for sampling
 class InverseComposition(Simulation):
@@ -90,7 +96,7 @@ class InverseComposition(Simulation):
         Simulation.__init__(self)
         self.inv_dist_list = inv_dist_list
         self.probabilties = probabilties
-        self.method = lambda i: self.inv_dist_list[i](random.uniform(0.0, 1.0))
+        self.method = lambda i, *args: self.inv_dist_list[i](self.uniform(0.0, 1.0))
 
     # generates samples using self.method
     @timer
@@ -99,3 +105,15 @@ class InverseComposition(Simulation):
         self.samples = [self.method(i) for i in np.random.choice(len(self.inv_dist_list), self.size, self.probabilties)] # container for the collected samples
         self.mean = np.mean(self.samples)
         self.var = np.var(self.samples, ddof = 1)
+
+# Implements accept-reject method for sampling
+class AcceptReject(Simulation):
+    def __init__(self, target_dist, helper_rv, ratio_bound):
+        self.helper_rv = helper_rv
+        self.ratio_bound = ratio_bound
+
+    def method(self, helper_args = (), *args):
+        rv_obtained = False
+        while rv_obtained is False:
+            sample = self.helper_rv.method(*helper_args)
+            if self.uniform(0.0, 1.0) <= self./(self.ratio_bound*self.helper_rv.density(sample))
