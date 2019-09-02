@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 import scipy.integrate as integrate
 from scipy.stats import rv_continuous
 from statsmodels.distributions.empirical_distribution import ECDF
@@ -8,175 +7,182 @@ from random import uniform
 from utility import timer
 
 # A class for defining generic continuous random variables
-class RVContinuous(rv_continuous):
-
-    def __init__(self, support, pdf = None, cdf = None):
+class RVContinuous(object):
+    # requires pdf or cdf of the random variable
+    def __init__(self, support, cdf = None, pdf = None, inv_cdf = None, params = None):
         # assign basic attributes
-        self.support = support
+        self.a = support[0] # left endpoint of support interval of pdf
+        self.b = support[1] # right endpoint of support interval of pdf
+        self.params = params # parameters of pdf and cdf
         if pdf is not None:
-            self.pdf = lambda x, *args: pdf(x, *args)
+            self.pdf_ = pdf # family of pdfs without parmeters specified
+            self.pdf = lambda x: self.pdf_(x, self.params) # pdf with parameters specified
         if cdf is not None:
-            self.cdf = lambda x, *args: cdf(x, *args)
+            self.cdf_ = cdf # family of cdfs without parmeters specified
+            self.cdf = lambda x: self.cdf_(x, self.params) # cdf with parameters specified
+        if inv_cdf is not None:
+            self.inv_cdf_ = inv_cdf # family of inverse cdfs without parmeters specified
+            self.inv_cdf = lambda x: self.inv_cdf_(x, self.params) # inverse cdf with parameters specified
 
-    def compute_mean(self, *args):
+    # reset parameters of the distribution
+    def set_params(self, new_params):
+        self.params = new_params
+        if hasattr(self, 'pdf'):
+            self.pdf = lambda x: self.pdf_(x, self.params)
+        if hasattr(self, 'cdf'):
+            self.cdf = lambda x: self.cdf_(x, self.params)
+        if hasattr(self, 'inv_cdf'):
+            self.inv_cdf = lambda x: self.inv_cdf_(x, self.params)
 
+    # returns and sets self.mean
+    def compute_mean(self):
+        # compute mean according to availability of pdf or cdf
         if hasattr(self, 'pdf'):
             # compute mean using pdf
-            self.mean = integrate.quad(lambda x, *args_: x*self.pdf(x, *args_), self.support[0], self.support[1], args = args)[0]
-
+            self.mean = integrate.quad(lambda x: x*self.pdf(x), self.a, self.b)[0]
         elif hasattr(self, 'cdf'):
             # parts of integrand
-            plus = lambda x, *args_: 1.0 - self.cdf(x, *args_)
-            minus = lambda x, *args_: -self.cdf(-x, *args_)
+            plus = lambda x: 1.0 - self.cdf(x)
+            minus = lambda x: -self.cdf(x)
 
-            # decide integrand according to the support being positive, negative or mixed
-            if self.support[0] >= 0.0:
-                integrand = lambda x, *args_: plus(x, *args_)
-            elif self.support[1] <= 0.0:
-                integrand = lambda x, *args_: minus(x, *args_)
+            # range of integration
+            left_lim = self.a
+            right_lim = self.b
+
+            # decide integrand and correction term according to self.a and self.b being finite/infinite
+            if np.isinf(self.a) is False:
+                integrand = plus
+                correction = self.a
+            elif np.isinf(self.b) is False:
+                integrand = minus
+                correction = self.b
             else:
-                integrand = lambda x, *args_: plus(x, *args_) + minus(x, *args_)
+                integrand = lambda x: plus(x) + minus(-x)
+                correction = 0.0
+                left_lim = 0.0
 
             # compute mean using cdf
-            self.mean = integrate.quad(integrand, self.support[0], self.support[1], args = args)[0] - self.mean**2
-
+            self.mean = integrate.quad(integrand, left_lim, right_lim)[0] + correction
         else:
             # if no pdf or cdf is defined, return nan
             self.mean = float('NaN')
-
         return self.mean
 
-    def compute_variance(self, *args):
-
+    # returns and sets self.var
+    def compute_variance(self):
+        # compute variance according to availability of pdf or cdf
         if hasattr(self, 'pdf'):
             # compute variance using pdf
-            self.var = integrate.quad(lambda x, *args_: x*x*self.pdf(x, *args_), self.support[0], self.support[1], args = args)[0] - self.mean**2
-
+            self.var = integrate.quad(lambda x: x*x*self.pdf(x), self.a, self.b)[0] - self.mean**2
         elif hasattr(self, 'cdf'):
-                # parts of integrand
-                plus = lambda x, *args_: 2.0*x*(1.0 - self.cdf(x, *args_))
-                minus = lambda x, *args_: 2.0*x*self.cdf(-x, *args_)
+            # parts of integrand
+            plus = lambda x: 2.0*x*(1.0 - self.cdf(x))
+            minus = lambda x: 2.0*x*self.cdf(x)
 
-                # decide integrand according to the support being positive, negative or mixed
-                if self.support[0] >= 0.0:
-                    integrand = lambda x, *args_: plus(x, *args_)
-                elif self.support[1] <= 0.0:
-                    integrand = lambda x, *args_: minus(x, *args_)
-                else:
-                    integrand = lambda x, *args_: plus(x, *args_) + minus(x, *args_)
+            # range of integration
+            left_lim = self.a
+            right_lim = self.b
 
-                # compute variance using cdf
-                self.var = integrate.quad(integrand, self.support[0], self.support[1], args = args)[0] - self.mean**2
+            # decide integrand and correction term according to self.a and self.b being finite/infinite
+            if np.isinf(self.a) is False:
+                integrand = plus
+                correction = self.a**2 - self.mean**2
+            elif np.isinf(self.b) is False:
+                integrand = minus
+                correction = self.b**2 - self.mean**2
+            else:
+                integrand = lambda x: plus(x) - minus(-x)
+                correction = - self.mean**2
+                left_lim = 0.0
 
+            # compute variance using cdf
+            self.var = integrate.quad(integrand, left_lim, right_lim)[0] + correction
         else:
             # if no pdf or cdf is defined, return nan
             self.var = float('NaN')
-
         return self.var
 
 # A bare-bones base class for algorithms that simulate a random variable
 class Simulation(object):
-    def __init__(self):
-        self.method = None # method of simulation/sampling
-        self.uniform  = uniform
+    # requires target RVContinuous object with cdf attribute
+    def __init__(self, target_random_variable):
+        # assign basic attributes
+        self.rv = target_random_variable # random variable to simulate
+        self.algorithm = None # algorithm for simulation/sampling
+        self.uniform  = uniform # uniform distribution from random module, needed for multiprocessing compatibility
 
-    # generates samples using self.method
+    # generates samples using self.algorithm
     @timer
     def generate(self, sample_size, *args):
         self.size = sample_size # number of samples to be collected
-        self.samples = [self.method(*args) for i in range(self.size)] # container for the collected samples
+        self.samples = [self.algorithm(*args) for i in range(self.size)] # container for the collected samples
         self.mean = np.mean(self.samples)
-        self.var = np.var(self.samples, ddof = 1)
+        self.var = np.var(self.samples, ddof = 1) # unbiased estimator
 
-    # draws density curves for target and simulation
-    def draw(self, target, range_, pts = 100, file_path = None, display = False):
-        plt.figure(figsize=(7,6))
-        sns.set()
-        sns.kdeplot(np.array(self.samples), label = 'simulation ($\mu$ = {:.4f}, $\sigma^2$ = {:.4f})'.format(self.mean, self.var))
-        x = np.linspace(range_[0], range_[1], pts, endpoint = True)
-        y = [target(pt) for pt in x]
-        plt.plot(x, y, label = 'target ($\mu$ = {:.4f}, $\sigma^2$ = {:.4f})'.format(self.target_mean, self.target_var))
-        plt.title('Density plots')
-        plt.xlabel('x')
-        plt.legend()
-        if file_path is not None:
-            plt.savefig(file_path)
-        if display is True:
-            plt.show()
+    # draws cdfs for target and simulation and sets self.ecdf
+    def compare(self, file_path = None, display = True, target_cdf_pts = 100):
+        # compute target mean and variance if not already computed
+        if hasattr(self.rv, 'mean') is False:
+            self.rv.compute_mean()
+        if hasattr(self.rv, 'var') is False:
+            self.rv.compute_variance()
 
-    # draws distribution curves for target and simulation
-    def draw_cdf(self, target, range_, pts = 100, file_path = None, display = False):
-        plt.figure(figsize = (7,6))
+        # compute and plot simulated cdf
         self.ecdf = ECDF(self.samples)
+        plt.figure(figsize = (7,6))
         plt.plot(self.ecdf.x, self.ecdf.y, label = 'simulation ($\mu$ = {:.4f}, $\sigma^2$ = {:.4f})'.format(self.mean, self.var))
-        x = np.linspace(range_[0], range_[1], pts, endpoint = True)
-        y = [target(pt) for pt in x]
-        plt.plot(x, y, label = 'target ($\mu$ = {:.4f}, $\sigma^2$ = {:.4f})'.format(self.target_mean, self.target_var))
+
+        # plot target cdf
+        x = np.linspace(self.rv.a, self.rv.b, target_cdf_pts, endpoint = True)
+        y = [self.rv.cdf(pt) for pt in x]
+        plt.plot(x, y, label = 'target ($\mu$ = {:.4f}, $\sigma^2$ = {:.4f})'.format(self.rv.mean, self.rv.var))
+
+        # write textual info on the plot
         plt.title('CDF vs ECDF')
         plt.xlabel('x')
         plt.legend()
+
+        # save and display
         if file_path is not None:
             plt.savefig(file_path)
-        if display is True:
+        if display:
             plt.show()
-
-    # generates a plot juxtaposing the target with the simulated distribution
-    @timer
-    def visualize(self, target_density, range_, pts = 100, file_path = None, display = False):
-        # Base class for a custom continuous random variable
-        self.rv = RVContinuous(target_density) # creates the target random variable
-        self.target_mean = self.rv.mean()
-        self.target_var = self.rv.var()
-        self.draw(target_density, range_, pts, file_path, display)
-
-
-    # generates a plot juxtaposing the target with the simulated distribution given the mean and variance of the target distribution
-    # suffix 'man' indicates you have to supply target_mean, target_dist manually to the function
-    @timer
-    def vis_man(self, target_density, range_, target_mean, target_var, pts = 100, file_path = None, display = False):
-        self.target_mean = target_mean
-        self.target_var = target_var
-        self.draw(target_density, range_, pts, file_path, display)
-
-    # generates a plot juxtaposing the target with the simulated distribution given the mean and variance of the target distribution
-    # suffix 'man' indicates you have to supply target_mean, target_dist manually to the function
-    @timer
-    def vis_cdf_man(self, target_dist, range_, target_mean, target_var, pts = 100, file_path = None, display = False):
-        self.target_mean = target_mean
-        self.target_var = target_var
-        self.draw_cdf(target_dist, range_, pts, file_path, display)
 
 # Implements the inverse transform algorithm
 class InverseTransform(Simulation):
-    def __init__(self, inv_dist):
-        Simulation.__init__(self)
-        self.method = lambda *args: inv_dist(self.uniform(0.0, 1.0), *args)
-
-# Implements composition method for sampling
+    # requires target_random_variable to have inv_cdf attribute
+    def __init__(self, target_random_variable):
+        # inherit attributes from Simulation
+        Simulation.__init__(self, target_random_variable)
+        # sampling algorithm
+        self.algorithm = lambda *args: self.rv.inv_cdf(self.uniform(0.0, 1.0))
+"""
+# Implements composition algorithm for sampling
 class InverseComposition(Simulation):
-    def __init__(self, inv_dist_list, probabilties):
+    def __init__(self, rv_list, probabilties):
         Simulation.__init__(self)
         self.inv_dist_list = inv_dist_list
         self.probabilties = probabilties
-        self.method = lambda i, *args: self.inv_dist_list[i](self.uniform(0.0, 1.0), *args)
+        self.algorithm = lambda i, *args: self.inv_dist_list[i](self.uniform(0.0, 1.0), *args)
 
-    # generates samples using self.method
+    # generates samples using self.algorithm
     @timer
     def generate(self, sample_size):
         self.size = sample_size # number of samples to be collected
-        self.samples = [self.method(i) for i in np.random.choice(len(self.inv_dist_list), self.size, self.probabilties)] # container for the collected samples
+        self.samples = [self.algorithm(i) for i in np.random.choice(len(self.inv_dist_list), self.size, self.probabilties)] # container for the collected samples
         self.mean = np.mean(self.samples)
         self.var = np.var(self.samples, ddof = 1)
 
-# Implements accept-reject method for sampling
+# Implements accept-reject algorithm for sampling
 class AcceptReject(Simulation):
     def __init__(self, target_rv, helper_rv, ratio_bound):
         self.target_rv = target_rv
         self.helper_rv = helper_rv
         self.ratio_bound = ratio_bound
 
-    def method(self, *args):
+    def algorithm(self, *args):
         while True:
-            sample = self.helper_rv.method(*helper_args)
+            sample = self.helper_rv.algorithm(*helper_args)
             if self.uniform(0.0, 1.0) <= self.target_rv.pdf(sample)/(self.ratio_bound*self.helper_rv.pdf(sample)):
                 return sample
+"""

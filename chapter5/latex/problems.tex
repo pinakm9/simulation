@@ -13,7 +13,7 @@ The distribution function is given by
 \begin{align*}
   F(x) = \begin{cases}
             \frac{(x-2)^2}{4}, & 2\le x\le 3 \\
-            \frac{1}{4} + \frac{(t-3)(9-t)}{12}, & 3\le x\le 6
+            \frac{1}{4} + \frac{(x-3)(9-x)}{12}, & 3\le x\le 6
         \end{cases}
 \end{align*}
 The inverse to which is given by
@@ -23,11 +23,11 @@ The inverse to which is given by
                 6-2\sqrt{3(1-y)}, & \frac{1}{4}\le y\le 1
               \end{cases}
 \end{align*}
-$1500$ samples generated with inverse transform algorithm yield the following result.
+$1000$ samples generated with inverse transform algorithm yield the following result.
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\linewidth]{../images/p2_density_it_1500.png}
-    \caption{density comparison}
+    \includegraphics[width=\linewidth]{../images/p2_1000.png}
+    \caption{distribution comparison}
 \end{figure}
 \newpage
 
