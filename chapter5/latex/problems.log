@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.8.20)  24 AUG 2019 13:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.8.20)  3 SEP 2019 06:27
 entering extended mode
 **./problems.tex
 (problems.tex
@@ -202,37 +202,34 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 13.
 ("C:\Language\MiKTeX 2.9\tex/latex/amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<../images/p2_density_it_1500.png, id=1, 505.89pt x 433.62pt>
-File: ../images/p2_density_it_1500.png Graphic file (type png)
-<use ../images/p2_density_it_1500.png>
-Package pdftex.def Info: ../images/p2_density_it_1500.png  used on input line 2
-9.
+<../images/p2_1000.png, id=1, 505.89pt x 433.62pt>
+File: ../images/p2_1000.png Graphic file (type png)
+<use ../images/p2_1000.png>
+Package pdftex.def Info: ../images/p2_1000.png  used on input line 29.
 (pdftex.def)             Requested size: 345.0pt x 295.71785pt.
  [1
 
 {C:/Users/pinak/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <../images/p
-2_density_it_1500.png>]
-<../images/p4_density_it_1_5_1000.png, id=17, 505.89pt x 433.62pt>
-File: ../images/p4_density_it_1_5_1000.png Graphic file (type png)
-<use ../images/p4_density_it_1_5_1000.png>
-Package pdftex.def Info: ../images/p4_density_it_1_5_1000.png  used on input li
-ne 46.
+2_1000.png>]
+<../images/p4_1_5_1000.png, id=17, 505.89pt x 433.62pt>
+File: ../images/p4_1_5_1000.png Graphic file (type png)
+<use ../images/p4_1_5_1000.png>
+Package pdftex.def Info: ../images/p4_1_5_1000.png  used on input line 46.
 (pdftex.def)             Requested size: 345.0pt x 295.71785pt.
-[2 <../images/p4_density_it_1_5_1000.png>]
-<../images/p6_dist_it_1000.png, id=23, 505.89pt x 433.62pt>
-File: ../images/p6_dist_it_1000.png Graphic file (type png)
-<use ../images/p6_dist_it_1000.png>
-Package pdftex.def Info: ../images/p6_dist_it_1000.png  used on input line 63.
+ [2 <../images/p4_1_5_1000.png>]
+<../images/p6.png, id=23, 505.89pt x 433.62pt>
+File: ../images/p6.png Graphic file (type png)
+<use ../images/p6.png>
+Package pdftex.def Info: ../images/p6.png  used on input line 63.
 (pdftex.def)             Requested size: 345.0pt x 295.71785pt.
- [3 <../images/p6_dist_it_1000.png>]
+ [3 <../images/p6.png>]
 <../images/p8a_dist_incomp_1500.png, id=28, 505.89pt x 433.62pt>
 File: ../images/p8a_dist_incomp_1500.png Graphic file (type png)
 <use ../images/p8a_dist_incomp_1500.png>
 Package pdftex.def Info: ../images/p8a_dist_incomp_1500.png  used on input line
  76.
 (pdftex.def)             Requested size: 345.0pt x 295.71785pt.
-
-[4 <../images/p8a_dist_incomp_1500.png>]
+ [4 <../images/p8a_dist_incomp_1500.png>]
 <../images/p8b_dist_incomp_1500.png, id=34, 505.89pt x 433.62pt>
 File: ../images/p8b_dist_incomp_1500.png Graphic file (type png)
 <use ../images/p8b_dist_incomp_1500.png>
@@ -253,7 +250,7 @@ Package pdftex.def Info: ../images/p8c_dist_incomp_1500.png  used on input line
 [6 <../images/p8c_dist_incomp_1500.png>] (problems.aux) ) 
 Here is how much of TeX's memory you used:
  2350 strings out of 492895
- 31227 string characters out of 3135799
+ 31116 string characters out of 3135799
  94769 words of memory out of 3000000
  6240 multiletter control sequences out of 15000+200000
  5944 words of font info for 24 fonts, out of 3000000 for 9000
@@ -269,7 +266,7 @@ fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Language/MiKTeX 2.9/fonts/type1/pub
 lic/amsfonts/cm/cmr7.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
 /cmsy10.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C
 :/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on problems.pdf (6 pages, 274245 bytes).
+Output written on problems.pdf (6 pages, 255469 bytes).
 PDF statistics:
  78 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

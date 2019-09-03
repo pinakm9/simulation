@@ -13,7 +13,7 @@ The distribution function is given by
 \begin{align*}
   F(x) = \begin{cases}
             \frac{(x-2)^2}{4}, & 2\le x\le 3 \\
-            \frac{1}{4} + \frac{(x-3)(9-x)}{12}, & 3\le x\le 6
+            -\frac{x^2}{12} + x - 2, & 3\le x\le 6
         \end{cases}
 \end{align*}
 The inverse to which is given by
@@ -43,8 +43,8 @@ The mean is $\frac{1}{\sqrt[\beta]{\alpha}}\Gamma\left(1+\frac{1}{\beta}\right)$
 $1000$ samples generated with inverse transform algorithm yield the following result.
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\linewidth]{../images/p4_density_it_1_5_1000.png}
-    \caption{density comparison for $\alpha = 1,\,\beta = 5$}
+    \includegraphics[width=\linewidth]{../images/p4_1_5_1000.png}
+    \caption{distribution comparison for $\alpha = 1,\,\beta = 5$}
 \end{figure}
 \newpage
 
@@ -60,7 +60,7 @@ Mean of the target distribution is given by,
 $1000$ samples generated with inverse transform algorithm yield the following result.
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\linewidth]{../images/p6_dist_it_1000.png}
+    \includegraphics[width=\linewidth]{../images/p6.png}
     \caption{distribution comparison}
 \end{figure}
 \newpage

@@ -1,25 +1,25 @@
 # This script requires 3 command line arguments (in this order) : alpha, beta, sample size
 import sys
 import numpy as np
-from simulate import InverseTransform
-from math import gamma
+from simulate import InverseTransform, RVContinuous
 
-# set parameter values
+# target probability distribution
+def target_cdf(x, params):
+    alpha_, beta_ = params
+    try:
+        return 1.0 - np.exp(-alpha_*x**beta_)
+    except:
+        return 1.0
+
+# inverse of the target distribution
+def inv_cdf(y, params):
+    alpha_, beta_ = params
+    return (-np.log(1-y)/alpha_)**(1.0/beta_)
+
+# set parameter values for cdf
 alpha, beta = float(sys.argv[1]), float(sys.argv[2])
 
-# target probability density
-def target_density(x, *args):
-    try:
-        return alpha*beta*np.exp(-alpha*x**beta)*x**(beta-1)
-    except OverflowError as Error:
-        return 0.0
-# inverse of the target distribution
-def inv_dist(y, *args):
-    return (-np.log(1-y)/alpha)**(1.0/beta)
-
-c = alpha**(-1.0/beta)
-target_mean = c*gamma(1.0 + 1.0/beta)
-target_var = c**2*(gamma(2.0 + 1.0/beta)-gamma(1.0 + 1.0/beta)**2)
-it = InverseTransform(inv_dist)
-it.generate(int(sys.argv[3]))
-it.vis_man(target_density, [0, 10], target_mean, target_var, file_path = '../images/p4_density_{}_{}_{}_{}.png'.format('it', sys.argv[1], sys.argv[2], sys.argv[3]), display = True)
+# simulate and compare
+sim = InverseTransform(RVContinuous(support = [0.0, np.inf], cdf = target_cdf, inv_cdf = inv_cdf, params = [alpha, beta]))
+sim.generate(int(sys.argv[3]))
+sim.compare(file_path = '../images/p4_{}_{}_{}.png'.format(sys.argv[1], sys.argv[2], sys.argv[3]), inf_limits = [0.0, 2.0])

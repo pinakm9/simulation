@@ -50,10 +50,10 @@ class RVContinuous(object):
             right_lim = self.b
 
             # decide integrand and correction term according to self.a and self.b being finite/infinite
-            if np.isinf(self.a) is False:
+            if not np.isinf(self.a):
                 integrand = plus
                 correction = self.a
-            elif np.isinf(self.b) is False:
+            elif not np.isinf(self.b):
                 integrand = minus
                 correction = self.b
             else:
@@ -84,10 +84,10 @@ class RVContinuous(object):
             right_lim = self.b
 
             # decide integrand and correction term according to self.a and self.b being finite/infinite
-            if np.isinf(self.a) is False:
+            if not np.isinf(self.a):
                 integrand = plus
                 correction = self.a**2 - self.mean**2
-            elif np.isinf(self.b) is False:
+            elif not np.isinf(self.b):
                 integrand = minus
                 correction = self.b**2 - self.mean**2
             else:
@@ -119,12 +119,12 @@ class Simulation(object):
         self.mean = np.mean(self.samples)
         self.var = np.var(self.samples, ddof = 1) # unbiased estimator
 
-    # draws cdfs for target and simulation and sets self.ecdf
-    def compare(self, file_path = None, display = True, target_cdf_pts = 100):
+    # draws cdfs for target and simulation and sets self.ecdf, inf_limits is a finite interval for np.linspace in case rv.pdf has unbounded support
+    def compare(self, file_path = None, display = True, target_cdf_pts = 100, inf_limits = [-10.0, 10.0]):
         # compute target mean and variance if not already computed
-        if hasattr(self.rv, 'mean') is False:
+        if not hasattr(self.rv, 'mean'):
             self.rv.compute_mean()
-        if hasattr(self.rv, 'var') is False:
+        if not hasattr(self.rv, 'var'):
             self.rv.compute_variance()
 
         # compute and plot simulated cdf
@@ -132,8 +132,12 @@ class Simulation(object):
         plt.figure(figsize = (7,6))
         plt.plot(self.ecdf.x, self.ecdf.y, label = 'simulation ($\mu$ = {:.4f}, $\sigma^2$ = {:.4f})'.format(self.mean, self.var))
 
+        # fix limits for np.linspace in case rv.a or rv.b is unbounded
+        left_lim = inf_limits[0] if np.isinf(self.rv.a) else self.rv.a
+        right_lim = inf_limits[1] if np.isinf(self.rv.b) else self.rv.b
+
         # plot target cdf
-        x = np.linspace(self.rv.a, self.rv.b, target_cdf_pts, endpoint = True)
+        x = np.linspace(left_lim, right_lim, target_cdf_pts, endpoint = True)
         y = [self.rv.cdf(pt) for pt in x]
         plt.plot(x, y, label = 'target ($\mu$ = {:.4f}, $\sigma^2$ = {:.4f})'.format(self.rv.mean, self.rv.var))
 

@@ -2,7 +2,7 @@
 import sys
 from simulate import InverseTransform, RVContinuous
 
-# target probability density
+# target probability distribution
 def target_cdf(x, *args):
     if x >= 2.0 and x <= 3.0:
         return 0.25 * (x-2.0)**2
@@ -18,11 +18,7 @@ def inv_cdf(y, *args):
     else:
         return 6 - 2*(3*(1-y))**0.5
 
-# create our target continuous random variable
-rv = RVContinuous([2.0, 6.0], target_cdf, inv_cdf = inv_cdf)
-print(rv.compute_mean(), rv.compute_variance())
-
 # simulate and compare
-sim = InverseTransform(rv)
+sim = InverseTransform(RVContinuous(support = [2.0, 6.0], cdf = target_cdf, inv_cdf = inv_cdf))
 sim.generate(int(sys.argv[1]))
 sim.compare(file_path = '../images/p2_{}.png'.format(sys.argv[1]))

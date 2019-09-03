@@ -1,8 +1,8 @@
 # Fdb version 3
-["pdflatex"] 1566632057 "problems.tex" "problems.pdf" "problems" 1566632058
-  "../images/p2_density_it_1500.png" 1566521171 42505 1c1859dd8fb05869dd36620c6e69657d ""
-  "../images/p4_density_it_1_5_1000.png" 1566531672 32412 bb7967456131ee892afc0672ac1870d6 ""
-  "../images/p6_dist_it_1000.png" 1566588333 34644 386c427d6aabd4b2481b602ed70b1579 ""
+["pdflatex"] 1567472235 "problems.tex" "problems.pdf" "problems" 1567472235
+  "../images/p2_1000.png" 1567472206 32409 1eda51a7658b9865cbcfa8876437a847 ""
+  "../images/p4_1_5_1000.png" 1567472197 30389 0b877fff6c85bb727b18d5905d13f577 ""
+  "../images/p6.png" 1567472171 31621 9aa88c27f1dd6af67ae4e9fa2fc20d19 ""
   "../images/p8a_dist_incomp_1500.png" 1566624856 30252 cbf438d535296b83aaf787cec8d121c4 ""
   "../images/p8b_dist_incomp_1500.png" 1566627591 24672 28b6e375245af3193e4e734a2d675726 ""
   "../images/p8c_dist_incomp_1500.png" 1566631854 32746 2588afda1d353df343d557547610ac6d ""
@@ -58,9 +58,9 @@
   "C:/Language/MiKTeX 2.9/tex/latex/oberdiek/kvoptions.sty" 1564409883 22417 1d9df1eb66848aa31b18a593099cf45c ""
   "C:/Users/pinak/AppData/Local/MiKTeX/2.9/miktex/data/le/pdftex/pdflatex.fmt" 1566293889 4233064 eb0175cc94b13016431486d737c7e934 ""
   "C:/Users/pinak/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map" 1566293761 80453 73224248f0a73acd005b5611945eaaa6 ""
-  "problems.aux" 1566632058 808 2ac8a04f5dfa1e1faae3e0146a6d555b "pdflatex"
-  "problems.tex" 1566632038 3677 54054d8d0e11d8acf8a00b440a949f15 ""
+  "problems.aux" 1567472235 818 3d325a14cbc8769c40c5ca6008129674 "pdflatex"
+  "problems.tex" 1567472232 3640 120b76986cc18837dc6116638bbf631d ""
   (generated)
   "problems.pdf"
-  "problems.log"
   "problems.aux"
+  "problems.log"

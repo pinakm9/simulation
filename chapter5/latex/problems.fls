@@ -1,4 +1,4 @@
-PWD C:\Users\pinak\Documents\Simulation\latex
+PWD C:\Users\pinak\Documents\GitHub\simulation\chapter5\latex
 INPUT C:\Users\pinak\AppData\Local\MiKTeX\2.9\miktex\data\le\pdftex\pdflatex.fmt
 INPUT problems.tex
 OUTPUT problems.log
@@ -75,23 +75,23 @@ INPUT C:\Language\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd
 INPUT C:\Language\MiKTeX 2.9\fonts\tfm\public\amsfonts\symbols\msbm10.tfm
 INPUT C:\Language\MiKTeX 2.9\fonts\tfm\public\amsfonts\symbols\msbm7.tfm
 INPUT C:\Language\MiKTeX 2.9\fonts\tfm\public\amsfonts\symbols\msbm5.tfm
-INPUT ..\images\p2_density_it_1500.png
-INPUT ..\images\p2_density_it_1500.png
+INPUT ..\images\p2_1000.png
+INPUT ..\images\p2_1000.png
 OUTPUT problems.pdf
-INPUT ..\images\p2_density_it_1500.png
-INPUT ..\images\p2_density_it_1500.png
-INPUT ..\images\p2_density_it_1500.png
+INPUT ..\images\p2_1000.png
+INPUT ..\images\p2_1000.png
+INPUT ..\images\p2_1000.png
 INPUT C:\Users\pinak\AppData\Local\MiKTeX\2.9\pdftex\config\pdftex.map
-INPUT ..\images\p4_density_it_1_5_1000.png
-INPUT ..\images\p4_density_it_1_5_1000.png
-INPUT ..\images\p4_density_it_1_5_1000.png
-INPUT ..\images\p4_density_it_1_5_1000.png
-INPUT ..\images\p4_density_it_1_5_1000.png
-INPUT ..\images\p6_dist_it_1000.png
-INPUT ..\images\p6_dist_it_1000.png
-INPUT ..\images\p6_dist_it_1000.png
-INPUT ..\images\p6_dist_it_1000.png
-INPUT ..\images\p6_dist_it_1000.png
+INPUT ..\images\p4_1_5_1000.png
+INPUT ..\images\p4_1_5_1000.png
+INPUT ..\images\p4_1_5_1000.png
+INPUT ..\images\p4_1_5_1000.png
+INPUT ..\images\p4_1_5_1000.png
+INPUT ..\images\p6.png
+INPUT ..\images\p6.png
+INPUT ..\images\p6.png
+INPUT ..\images\p6.png
+INPUT ..\images\p6.png
 INPUT ..\images\p8a_dist_incomp_1500.png
 INPUT ..\images\p8a_dist_incomp_1500.png
 INPUT ..\images\p8a_dist_incomp_1500.png
