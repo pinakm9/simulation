@@ -3,6 +3,11 @@ import sys
 import numpy as np
 from simulate import InverseTransform, RVContinuous
 
+# unpack command-line arguments
+alpha = float(sys.argv[1])
+beta = float(sys.argv[2])
+sample_size = int(sys.argv[3])
+
 # target probability distribution
 def target_cdf(x, params):
     alpha_, beta_ = params
@@ -16,10 +21,7 @@ def inv_cdf(y, params):
     alpha_, beta_ = params
     return (-np.log(1-y)/alpha_)**(1.0/beta_)
 
-# set parameter values for cdf
-alpha, beta = float(sys.argv[1]), float(sys.argv[2])
-
 # simulate and compare
 sim = InverseTransform(RVContinuous(support = [0.0, np.inf], cdf = target_cdf, inv_cdf = inv_cdf, params = [alpha, beta]))
-sim.generate(int(sys.argv[3]))
-sim.compare(file_path = '../images/p4_{}_{}_{}.png'.format(sys.argv[1], sys.argv[2], sys.argv[3]), inf_limits = [0.0, 2.0])
+sim.generate(sample_size)
+sim.compare(file_path = '../images/p4_{}_{}_{}.png'.format(alpha, beta, sample_size), inf_limits = [0.0, 2.0])

@@ -2,6 +2,9 @@
 import sys
 from simulate import InverseTransform, RVContinuous
 
+# unpack command-line arguments
+sample_size = int(sys.argv[1])
+
 # target probability distribution
 def target_cdf(x, *args):
     if x >= 2.0 and x <= 3.0:
@@ -20,5 +23,5 @@ def inv_cdf(y, *args):
 
 # simulate and compare
 sim = InverseTransform(RVContinuous(support = [2.0, 6.0], cdf = target_cdf, inv_cdf = inv_cdf))
-sim.generate(int(sys.argv[1]))
-sim.compare(file_path = '../images/p2_{}.png'.format(sys.argv[1]))
+sim.generate(sample_size)
+sim.compare(file_path = '../images/p2_{}.png'.format(sample_size))

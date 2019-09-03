@@ -6,10 +6,11 @@ from statsmodels.distributions.empirical_distribution import ECDF
 from random import uniform
 from utility import timer
 
-# A class for defining generic continuous random variables
 class RVContinuous(object):
-    # requires pdf or cdf of the random variable
+    """A class for defining generic continuous random variables"""
+
     def __init__(self, support, cdf = None, pdf = None, inv_cdf = None, params = None):
+        """requires pdf or cdf of the random variable"""
         # assign basic attributes
         self.a = support[0] # left endpoint of support interval of pdf
         self.b = support[1] # right endpoint of support interval of pdf
@@ -24,8 +25,8 @@ class RVContinuous(object):
             self.inv_cdf_ = inv_cdf # family of inverse cdfs without parmeters specified
             self.inv_cdf = lambda x: self.inv_cdf_(x, self.params) # inverse cdf with parameters specified
 
-    # reset parameters of the distribution
     def set_params(self, new_params):
+        """resets parameters of the distribution"""
         self.params = new_params
         if hasattr(self, 'pdf'):
             self.pdf = lambda x: self.pdf_(x, self.params)
@@ -34,8 +35,8 @@ class RVContinuous(object):
         if hasattr(self, 'inv_cdf'):
             self.inv_cdf = lambda x: self.inv_cdf_(x, self.params)
 
-    # returns and sets self.mean
     def compute_mean(self):
+        """returns and sets self.mean"""
         # compute mean according to availability of pdf or cdf
         if hasattr(self, 'pdf'):
             # compute mean using pdf
@@ -68,8 +69,8 @@ class RVContinuous(object):
             self.mean = float('NaN')
         return self.mean
 
-    # returns and sets self.var
     def compute_variance(self):
+        """returns and sets self.var"""
         # compute variance according to availability of pdf or cdf
         if hasattr(self, 'pdf'):
             # compute variance using pdf
@@ -102,25 +103,27 @@ class RVContinuous(object):
             self.var = float('NaN')
         return self.var
 
-# A bare-bones base class for algorithms that simulate a random variable
 class Simulation(object):
-    # requires target RVContinuous object with cdf attribute
-    def __init__(self, target_random_variable):
+    """A bare-bones base class for algorithms that simulate a random variable"""
+
+    def __init__(self, target_rv):
+        """requires target RVContinuous object with cdf attribute"""
         # assign basic attributes
-        self.rv = target_random_variable # random variable to simulate
+        self.rv = target_rv # random variable to simulate
         self.algorithm = None # algorithm for simulation/sampling
         self.uniform  = uniform # uniform distribution from random module, needed for multiprocessing compatibility
+        self.choice = np.random.choice # needed for multiprocessing compatibility
 
-    # generates samples using self.algorithm
     @timer
     def generate(self, sample_size, *args):
+        """generates samples using self.algorithm"""
         self.size = sample_size # number of samples to be collected
         self.samples = [self.algorithm(*args) for i in range(self.size)] # container for the collected samples
         self.mean = np.mean(self.samples)
         self.var = np.var(self.samples, ddof = 1) # unbiased estimator
 
-    # draws cdfs for target and simulation and sets self.ecdf, inf_limits is a finite interval for np.linspace in case rv.pdf has unbounded support
     def compare(self, file_path = None, display = True, target_cdf_pts = 100, inf_limits = [-10.0, 10.0]):
+        """draws cdfs for target and simulation and sets self.ecdf, inf_limits is a finite interval for np.linspace in case rv.pdf has unbounded support"""
         # compute target mean and variance if not already computed
         if not hasattr(self.rv, 'mean'):
             self.rv.compute_mean()
@@ -152,41 +155,50 @@ class Simulation(object):
         if display:
             plt.show()
 
-# Implements the inverse transform algorithm
 class InverseTransform(Simulation):
-    # requires target_random_variable to have inv_cdf attribute
-    def __init__(self, target_random_variable):
+    """Implements the inverse transform algorithm"""
+
+    def __init__(self, target_rv):
+        """requires target_rv to have inv_cdf attribute"""
         # inherit attributes from Simulation
-        Simulation.__init__(self, target_random_variable)
+        Simulation.__init__(self, target_rv)
         # sampling algorithm
         self.algorithm = lambda *args: self.rv.inv_cdf(self.uniform(0.0, 1.0))
-"""
-# Implements composition algorithm for sampling
+
 class InverseComposition(Simulation):
-    def __init__(self, rv_list, probabilties):
-        Simulation.__init__(self)
-        self.inv_dist_list = inv_dist_list
+    """Implements composition algorithm for sampling with inverse transform"""
+
+    def __init__(self, target_rv, rv_components, probabilties):
+        """requires a list of RVContinuous objects with inv_cdf and a discrete probability distribution"""
+        # inherit attributes from Simulation
+        Simulation.__init__(self, target_rv)
+        # assign basic attributes and define algorithm
+        self.rv_components = rv_components
         self.probabilties = probabilties
-        self.algorithm = lambda i, *args: self.inv_dist_list[i](self.uniform(0.0, 1.0), *args)
+        self.algorithm = lambda i, *args: self.rv_components[i].inv_cdf(self.uniform(0.0, 1.0), *args)
 
-    # generates samples using self.algorithm
     @timer
-    def generate(self, sample_size):
+    def generate(self, sample_size, *args):
+        """generates samples using self.algorithm"""
         self.size = sample_size # number of samples to be collected
-        self.samples = [self.algorithm(i) for i in np.random.choice(len(self.inv_dist_list), self.size, self.probabilties)] # container for the collected samples
+        self.samples = [self.algorithm(i, *args) for i in self.choice(len(self.rv_components), self.size, self.probabilties)] # container for the collected samples
         self.mean = np.mean(self.samples)
-        self.var = np.var(self.samples, ddof = 1)
+        self.var = np.var(self.samples, ddof = 1) # unbiased estimator
 
-# Implements accept-reject algorithm for sampling
 class AcceptReject(Simulation):
+    """Implements accept-reject algorithm for sampling"""
+
     def __init__(self, target_rv, helper_rv, ratio_bound):
-        self.target_rv = target_rv
+        """requires target and helper RVContinuous objects and an upper bound for the ratio of their pdfs"""
+        # inherit attributes from Simulation
+        Simulation.__init__(self, target_rv)
+        # assign basic attributes
         self.helper_rv = helper_rv
         self.ratio_bound = ratio_bound
 
     def algorithm(self, *args):
+        """accept-reject algorithm"""
         while True:
-            sample = self.helper_rv.algorithm(*helper_args)
+            sample = self.helper_rv.algorithm(*args)
             if self.uniform(0.0, 1.0) <= self.target_rv.pdf(sample)/(self.ratio_bound*self.helper_rv.pdf(sample)):
                 return sample
-"""

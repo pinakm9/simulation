@@ -92,21 +92,21 @@ INPUT ..\images\p6.png
 INPUT ..\images\p6.png
 INPUT ..\images\p6.png
 INPUT ..\images\p6.png
-INPUT ..\images\p8a_dist_incomp_1500.png
-INPUT ..\images\p8a_dist_incomp_1500.png
-INPUT ..\images\p8a_dist_incomp_1500.png
-INPUT ..\images\p8a_dist_incomp_1500.png
-INPUT ..\images\p8a_dist_incomp_1500.png
-INPUT ..\images\p8b_dist_incomp_1500.png
-INPUT ..\images\p8b_dist_incomp_1500.png
-INPUT ..\images\p8b_dist_incomp_1500.png
-INPUT ..\images\p8b_dist_incomp_1500.png
-INPUT ..\images\p8b_dist_incomp_1500.png
-INPUT ..\images\p8c_dist_incomp_1500.png
-INPUT ..\images\p8c_dist_incomp_1500.png
-INPUT ..\images\p8c_dist_incomp_1500.png
-INPUT ..\images\p8c_dist_incomp_1500.png
-INPUT ..\images\p8c_dist_incomp_1500.png
+INPUT ..\images\p8a_1000.png
+INPUT ..\images\p8a_1000.png
+INPUT ..\images\p8a_1000.png
+INPUT ..\images\p8a_1000.png
+INPUT ..\images\p8a_1000.png
+INPUT ..\images\p8b_1000.png
+INPUT ..\images\p8b_1000.png
+INPUT ..\images\p8b_1000.png
+INPUT ..\images\p8b_1000.png
+INPUT ..\images\p8b_1000.png
+INPUT ..\images\p8c_5_1500.png
+INPUT ..\images\p8c_5_1500.png
+INPUT ..\images\p8c_5_1500.png
+INPUT ..\images\p8c_5_1500.png
+INPUT ..\images\p8c_5_1500.png
 INPUT problems.aux
 INPUT C:\Language\MiKTeX 2.9\fonts\type1\public\amsfonts\cm\cmbx12.pfb
 INPUT C:\Language\MiKTeX 2.9\fonts\type1\public\amsfonts\cm\cmbx12.pfb

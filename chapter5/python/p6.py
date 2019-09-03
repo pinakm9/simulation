@@ -14,7 +14,6 @@ def inv_cdf(y, *args):
 
 # simulate and compare
 sim = InverseTransform(RVContinuous(support = [0.0, 0.05], cdf = target_cdf, inv_cdf = inv_cdf))
-sample_size = 1000
-sim.generate(sample_size)
+sim.generate(1000)
 sim.compare(file_path = '../images/p6.png')
 print('simulated mean = {:.4f}\nexact mean = {:.4f}'.format(sim.mean, sim.rv.mean))

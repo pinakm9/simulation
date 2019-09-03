@@ -1,25 +1,26 @@
 # This script requires 1 command line argument : sample size
 import sys
 import numpy as np
-from simulate import InverseComposition
+from simulate import InverseComposition, RVContinuous
+
+# unpack command-line arguments
+sample_size = int(sys.argv[1])
 
 # target probabilty distribution
-def target_dist(x):
+def target_cdf(x, *args):
     if x < 1.0:
         return (1- np.exp(-2*x) + 2*x)/3.0
     else:
         return (3 - np.exp(-2*x))/3.0
 
-# inverse for the distribution F_1
-def inv_1(y):
-    return -0.5*np.log(1-y)
+# cdfs for the component distributions
+cdfs = [lambda x, *args: 1.0 - np.exp(-2*x), lambda x, *args: x if x < 1.0 else 1.0]
 
-# inverse for the distribution F_1
-def inv_2(y):
-    return y
+# inverse for the component distributions
+inv_cdfs = [lambda y, *args: -0.5*np.log(1-y), lambda y, *args: y]
 
-comp = InverseComposition([inv_1, inv_2], [1/3.0, 2/3.0])
-comp.generate(int(sys.argv[1]))
-target_mean = 0.5
-target_var =  7/18.0 - target_mean**2
-comp.vis_cdf_man(target_dist, [0.0, 10.0], target_mean, target_var, file_path = '../images/p8b_dist_{}_{}.png'.format('incomp', sys.argv[1]), display = True)
+# simulate and compare
+rv_components = [RVContinuous(support = [0.0, np.inf], cdf = cdf, inv_cdf = inv_cdf) for cdf, inv_cdf in zip(cdfs, inv_cdfs)]
+sim = InverseComposition(RVContinuous(support = [0.0, np.inf], cdf = target_cdf), rv_components, [1.0/3.0, 2.0/3.0])
+sim.generate(sample_size)
+sim.compare(file_path = '../images/p8b_{}.png'.format(sample_size))
