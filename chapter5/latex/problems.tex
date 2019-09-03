@@ -109,4 +109,43 @@ $1500$ samples generated with composition method yield the following result.
 \end{figure}
 \newpage
 
+\subsection*{Problem 10}
+Our notation is as follows.
+\newline
+$n = 1000 = $ number of policyholders
+\newline
+$s_i = $ indicator variable for $i$-th policyholder presenting a claim
+\newline
+$p = E[s_i] = 0.05\;\forall i$
+\newline
+$X_i = $ amount of claim presented by $i$-th policyholder
+\newline
+$\mu = E[X_i]\;\forall i$
+\newline
+$Y = \sum_{i=1}^n s_i X_i$ = amount of total claim presented by all policyholders
+\newline
+$F(x) = $ cdf of $Y$
+\newline
+$A = $ a certain amount of money, for our purposes $A = \$50,000$
+\newline
+$M$ = set of all binary $n$-tuples
+\newline
+$M_k = $  set of binary $n$-tuple with exactly $k$-entries being $1$
+\newline
+$P(Y > A|m) = $ probabilty conditioned on $s_i=m_i\;\forall i$ where $m\in M$.
+\newline
+$P(m) = $ probabilty that $s_i = m_i\;\forall i$ where $m\in M$.
+\newline
+$\Gamma(x, \mu, k) = $ gamma distribution that is the sum of $k$ identical exponential distributions with mean $\mu$
+With our notations we need to compute the following.
+\begin{align*}
+F(A) =& P(Y \le A) = \sum_{m\in M}P(Y \le A| m)P(m) \\
+=& \sum_{k=1}^n\sum_{m\in M_k}P(Y \le A| m)P(m) \\
+=& \sum_{k=1}^n\sum_{m\in M_k}P(Y \le A| m)p^k(1-p)^{n-k} \\
+=& \sum_{k=1}^n |M_k|p^k(1-p)^{n-k} P(Y \le A| m_k) ,\qquad m_k\in M_k \\
+=& \sum_{k=1}^n \binom{n}{k}p^k(1-p)^{n-k}P(Y \le A| m_k) \\
+=& \sum_{k=1}^n \binom{n}{k}p^k(1-p)^{n-k}\Gamma(\mu, k) \\
+=:& \sum_{k=1}^n p_{n,k}\Gamma(A, \mu, k)
+\end{align*}
+$\sum_{k=1}^n p_{n,k} = 1$ and $p_{n,k} > 0$ which implies we can sample $Y$ using composition technique because we can already sample gamma distributions.
 \end{document}

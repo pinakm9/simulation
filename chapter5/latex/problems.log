@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.8.20)  3 SEP 2019 08:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.9.3)  3 SEP 2019 10:41
 entering extended mode
 **./problems.tex
 (problems.tex
@@ -241,28 +241,28 @@ File: ../images/p8c_5_1500.png Graphic file (type png)
 <use ../images/p8c_5_1500.png>
 Package pdftex.def Info: ../images/p8c_5_1500.png  used on input line 107.
 (pdftex.def)             Requested size: 345.0pt x 295.71785pt.
- [6 <../images/p8c_5_1500.png>] (problems.aux) ) 
+ [6 <../images/p8c_5_1500.png>] [7] (problems.aux) ) 
 Here is how much of TeX's memory you used:
  2350 strings out of 492895
- 30946 string characters out of 3135799
- 94769 words of memory out of 3000000
+ 30946 string characters out of 3135800
+ 97769 words of memory out of 3000000
  6240 multiletter control sequences out of 15000+200000
  5944 words of font info for 24 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,14n,27p,277b,227s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Language/MiKTeX 2.9/fonts/t
-ype1/public/amsfonts/cm/cmbx12.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/a
-msfonts/cm/cmex10.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
-mi10.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/L
-anguage/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Language/MiKTeX
- 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Language/MiKTeX 2.9/fonts/typ
-e1/public/amsfonts/cm/cmr5.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfo
-nts/cm/cmr7.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.p
-fb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:/Languag
-e/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on problems.pdf (6 pages, 255841 bytes).
+<C:/Language/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Language/MiKTeX 2.9/fonts/type1/publ
+ic/amsfonts/cm/cmex10.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/c
+m/cmmi10.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi5.pfb><
+C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Language/Mi
+KTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Language/MiKTeX 2.9/fonts
+/type1/public/amsfonts/cm/cmr5.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmr7.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy
+10.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:/Lan
+guage/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on problems.pdf (7 pages, 267707 bytes).
 PDF statistics:
- 78 PDF objects out of 1000 (max. 8388607)
+ 83 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
