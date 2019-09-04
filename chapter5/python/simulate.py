@@ -165,23 +165,23 @@ class InverseTransform(Simulation):
         # sampling algorithm
         self.algorithm = lambda *args: self.rv.inv_cdf(self.uniform(0.0, 1.0))
 
-class InverseComposition(Simulation):
+class Composition(Simulation):
     """Implements composition algorithm for sampling with inverse transform"""
 
-    def __init__(self, target_rv, rv_components, probabilties):
+    def __init__(self, target_rv, sim_components, probabilties):
         """requires a list of RVContinuous objects with inv_cdf and a discrete probability distribution"""
         # inherit attributes from Simulation
         Simulation.__init__(self, target_rv)
         # assign basic attributes and define algorithm
-        self.rv_components = rv_components
+        self.sim_components = sim_components
         self.probabilties = probabilties
-        self.algorithm = lambda i, *args: self.rv_components[i].inv_cdf(self.uniform(0.0, 1.0), *args)
+        self.algorithm = lambda i, *args: self.sim_components[i].algorithm(*args)
 
     @timer
     def generate(self, sample_size, *args):
         """generates samples using self.algorithm"""
         self.size = sample_size # number of samples to be collected
-        self.samples = [self.algorithm(i, *args) for i in self.choice(len(self.rv_components), self.size, self.probabilties)] # container for the collected samples
+        self.samples = [self.algorithm(i, *args) for i in self.choice(len(self.sim_components), self.size, self.probabilties)] # container for the collected samples
         self.mean = np.mean(self.samples)
         self.var = np.var(self.samples, ddof = 1) # unbiased estimator
 
