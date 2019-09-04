@@ -99,13 +99,13 @@ $1000$ samples generated with composition method yield the following result.
 \subsection*{Problem 8(c)}
 Our setup is as follows. The probability weights have been generated randomly.
 \begin{align*}
-  \bar\alpha = (& 0.02195764, 0.06790598, 0.14786533, 0.15823267, 0.15668765,\\
-   & 0.05942056, 0.04305776, 0.02730875, 0.21558822, 0.10197544)
+  \bar\alpha = ( & 0.17681302, 0.08941652, 0.13690479, 0.14830053, 0.15965611, \\
+                 & 0.17054088, 0.03269305, 0.00496038, 0.0506282,  0.03008653)
 \end{align*}
 $1500$ samples generated with composition method yield the following result.
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\linewidth]{../images/p8c_5_1500.png}
+    \includegraphics[width=\linewidth]{../images/p8c_10_1500.png}
     \caption{distribution comparison}
 \end{figure}
 \newpage
@@ -140,12 +140,12 @@ $P(m) = $ probabilty that $s_i = m_i\;\forall i$ where $m\in M$.
 $\Gamma(x, \mu, k) = $ gamma distribution that is the sum of $k$ identical exponential distributions with mean $\mu$
 With our notations we need to compute the following.
 \begin{align*}
-F(A) =& P(Y \le A) = \sum_{m\in M}P(Y \le A| m)P(m) \\
+F(A) =& \,P(Y \le A) = \sum_{m\in M}P(Y \le A| m)P(m) \\
 =& \sum_{k=1}^n\sum_{m\in M_k}P(Y \le A| m)P(m) \\
 =& \sum_{k=1}^n\sum_{m\in M_k}P(Y \le A| m)p^k(1-p)^{n-k} \\
 =& \sum_{k=1}^n |M_k|p^k(1-p)^{n-k} P(Y \le A| m_k) ,\qquad m_k\in M_k \\
 =& \sum_{k=1}^n \binom{n}{k}p^k(1-p)^{n-k}P(Y \le A| m_k) \\
-=& \sum_{k=1}^n \binom{n}{k}p^k(1-p)^{n-k}\Gamma(\mu, k) \\
+=& \sum_{k=1}^n \binom{n}{k}p^k(1-p)^{n-k}\Gamma(A, \mu, k) \\
 =:& \sum_{k=1}^n p_{n,k}\Gamma(A, \mu, k)
 \end{align*}
 $\sum_{k=1}^n p_{n,k} = 1$ and $p_{n,k} > 0$ which implies we can sample $Y$ using composition technique because we can already sample gamma distributions.

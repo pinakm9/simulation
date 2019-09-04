@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.8.20)  4 SEP 2019 06:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.8.20)  4 SEP 2019 15:46
 entering extended mode
 **./problems.tex
 (problems.tex
@@ -236,31 +236,31 @@ Package pdftex.def Info: ../images/p8b_1000.png  used on input line 94.
 (pdftex.def)             Requested size: 345.0pt x 295.71785pt.
 
 [5 <../images/p8b_1000.png>]
-<../images/p8c_5_1500.png, id=39, 505.89pt x 433.62pt>
-File: ../images/p8c_5_1500.png Graphic file (type png)
-<use ../images/p8c_5_1500.png>
-Package pdftex.def Info: ../images/p8c_5_1500.png  used on input line 108.
+<../images/p8c_10_1500.png, id=39, 505.89pt x 433.62pt>
+File: ../images/p8c_10_1500.png Graphic file (type png)
+<use ../images/p8c_10_1500.png>
+Package pdftex.def Info: ../images/p8c_10_1500.png  used on input line 108.
 (pdftex.def)             Requested size: 345.0pt x 295.71785pt.
- [6 <../images/p8c_5_1500.png>] [7] (problems.aux) ) 
+ [6 <../images/p8c_10_1500.png>] [7] (problems.aux) ) 
 Here is how much of TeX's memory you used:
  2350 strings out of 492895
- 30946 string characters out of 3135799
+ 30951 string characters out of 3135799
  97769 words of memory out of 3000000
  6240 multiletter control sequences out of 15000+200000
  5944 words of font info for 24 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,14n,27p,277b,227s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Language/MiKTeX 2.9/fon
-ts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Language/MiKTeX 2.9/fonts/type1/publ
-ic/amsfonts/cm/cmex10.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/c
-m/cmmi10.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi5.pfb><
-C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Language/Mi
-KTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Language/MiKTeX 2.9/fonts
-/type1/public/amsfonts/cm/cmr5.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/a
-msfonts/cm/cmr7.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy
-10.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:/Lan
-guage/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on problems.pdf (7 pages, 268986 bytes).
+<C:/Language/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Language/MiKTeX 2.9/fonts/type1/pub
+lic/amsfonts/cm/cmex10.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/
+cm/cmmi10.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi5.pfb>
+<C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Language/M
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Language/MiKTeX 2.9/font
+s/type1/public/amsfonts/cm/cmr5.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/
+amsfonts/cm/cmr7.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cms
+y10.pfb><C:/Language/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:/La
+nguage/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on problems.pdf (7 pages, 264921 bytes).
 PDF statistics:
  83 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

@@ -1,12 +1,12 @@
 # This script requires 1 command line argument : sample size
 import sys
-from simulate import InverseTransform, RVContinuous
+from simulate import RVContinuous, Simulation
 
 # unpack command-line arguments
 sample_size = int(sys.argv[1])
 
 # target probability distribution
-def target_cdf(x, *args):
+def target_cdf(x):
     if x >= 2.0 and x <= 3.0:
         return 0.25 * (x-2.0)**2
     elif x > 3.0 and x <= 6.0:
@@ -15,13 +15,14 @@ def target_cdf(x, *args):
         return 0.0
 
 # inverse of the target distribution
-def inv_cdf(y, *args):
+def inv_cdf(y):
     if y <= 0.25:
         return 2*(y**0.5 + 1)
     else:
         return 6 - 2*(3*(1-y))**0.5
 
 # simulate and compare
-sim = InverseTransform(RVContinuous(support = [2.0, 6.0], cdf = target_cdf, inv_cdf = inv_cdf))
+rv = RVContinuous(support = [2.0, 6.0], cdf = target_cdf)
+sim = Simulation(target_rv = rv, algorithm = 'inverse', inv_cdf = inv_cdf)
 sim.generate(sample_size)
 sim.compare(file_path = '../images/p2_{}.png'.format(sample_size))
