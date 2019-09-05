@@ -14,12 +14,14 @@ class RVContinuous(object):
     This is a class for defining generic continuous random variables.
     """
 
-    def __init__(self, name = 'unknown', support = (0.0, 1.0), cdf = None, pdf = None, **params):
+    def __init__(self, name = 'unknown', support = (0.0, 1.0), cdf = None, pdf = None, find_mean = None, find_var = None, **params):
         """
         In case the random variable has a well-known distribution, providing the name of the random variable and
         **params = parameters of the distribution will set all other arguments automatically.
         Currently a known name can be anything in the list ['gamma']. Dafault is 'unknown'.
         support = support of the pdf, default = (0.0, 1.0)
+        find_mean = custom function for computing mean, accpets parameters of the distribution as **kwargs
+        find_var = custom function for computing variance, accpets parameters of the distribution as **kwargs
         params = dict of keyword arguments that are passed to pdf, cdf and inv_cdf
         Either pdf or cdf is required for mean and variance computation. One of them can be omitted.
         """
@@ -39,17 +41,31 @@ class RVContinuous(object):
         if cdf is not None:
             self.cdf_ = cdf # family of cdfs without parmeters specified
             self.cdf = lambda x: self.cdf_(x, **self.params) # cdf with parameters specified
+        if find_mean is not None:
+            self.find_mean_ = find_mean # family of find_means without parmeters specified
+            self.find_mean = lambda: self.find_mean_(**self.params) # find_mean with parameters specified
+        if find_var is not None:
+            self.find_var_ = find_var # family of find_vars without parmeters specified
+            self.find_var = lambda: self.find_var_(**self.params) # find_var with parameters specified)
+        self.mean = 'not_yet_computed'
+        self.var = 'not_yet_computed'
 
 
     def set_params(self, **new_params):
         """
         Resets parameters of the distribution to new_params.
+        Passing only the parameters that need to be changed suffices.
         """
-        self.params = new_params
+        for key, value in new_params.items():
+            self.params[key] = value
         if hasattr(self, 'pdf'):
             self.pdf = lambda x: self.pdf_(x, **self.params)
         if hasattr(self, 'cdf'):
             self.cdf = lambda x: self.cdf_(x, **self.params)
+        if hasattr(self, 'find_mean'):
+            self.find_mean = lambda: self.find_mean_(**self.params)
+        if hasattr(self, 'find_var'):
+            self.find_var = lambda: self.find_var_(**self.params)
 
 
     def compute_mean(self):
@@ -122,16 +138,34 @@ class RVContinuous(object):
             self.var = float('NaN')
         return self.var
 
-        def find_mean_var(self):
-            """
-            Sets self.mean and self.var using known formulae for known distributions.
-            Returns results as a {'mean': -, 'var': -} dict.
-            """
-            if self.name == 'gamma':
-                shape, scale = self.params['shape'], self.params['scale']
-                self.mean = shape*scale
-                self.var = shape*scale**2
-            return {'mean': self.mean, 'var': self.var}
+    def set_stats(self, stats = ()):
+        """
+        Computes and sets the user-chosen statistics of the distribution using the easiest possible methods
+        depending on availability of find_mean, find_var etc.
+        stats = list/tuple of statistic names to be computed.
+        If the value is set to True, set_stats will try to compute the corresponding statistic.
+        If stats = () (default), all statistics are computed.
+        """
+        for stat in stats:
+            if hasattr(self, 'find_' + stat):
+                setattr(self, stat, getattr(self, 'find_' + stat)())
+            else:
+                setattr(self, stat, getattr(self, 'compute_' + stat)())
+
+    def set_unset_stats(self, stats = ()):
+        """
+        Sets the unset statistics of the distribution using self.set_stats.
+        stats = list/tuple of unset statistics.
+        In case stats = () (default), all unset statistics are set.
+        """
+        if stats == ():
+            stats = ('mean', 'var')
+        stats_to_compute = []
+        for stat in stats:
+            if hasattr(self, stat):
+                stats_to_compute.append(stat)
+        self.set_stats(stats_to_compute)
+
 
 #############################################
 # Sampling algorithm (function) definitions #
@@ -193,6 +227,8 @@ class Simulation(object):
             self.algorithm = lambda *args: composition(**self.algorithm_args) # algorithm_args = {'sim_components': -, 'probabilties': -}
         elif algorithm == 'rejection':
             self.algorithm = lambda *args: rejection(self.rv, **self.algorithm_args) # algorithm_args = {'helper_rv': -, 'ratio_bound': -}
+        elif algorithm == 'gamma':
+            self.algorithm = lambda *args: np.random.gamma(**self.rv.params)
         else:
             self.algorithm = algorithm
 
@@ -216,10 +252,7 @@ class Simulation(object):
         inf_limits is a finite interval for np.linspace in case rv.pdf has unbounded support.
         """
         # compute target mean and variance if not already computed
-        if not hasattr(self.rv, 'mean'):
-            self.rv.compute_mean()
-        if not hasattr(self.rv, 'var'):
-            self.rv.compute_var()
+        self.rv.set_unset_stats()#('mean', 'var'))
 
         # compute and plot simulated cdf
         self.ecdf = ECDF(self.samples)
