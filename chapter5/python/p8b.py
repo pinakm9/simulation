@@ -6,7 +6,7 @@ from simulate import RVContinuous, Simulation
 # unpack command-line arguments
 sample_size = int(sys.argv[1])
 
-# target probabilty distribution
+# target probability distribution
 def target_cdf(x):
     if x < 1.0:
         return (1- np.exp(-2*x) + 2*x)/3.0
