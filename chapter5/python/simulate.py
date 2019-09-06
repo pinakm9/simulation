@@ -221,18 +221,7 @@ class Simulation(object):
         # self.uniform  = np.random.uniform # uniform distribution, needed for multiprocessing compatibility
         # self.choice = np.random.choice # discrete distribution, needed for multiprocessing compatibility
         # self.gamma = np.random.gamma # gamma distribution, needed for multiprocessing compatibility
-
-        # set built-in algorithm simulation/sampling if possible
-        if algorithm == 'inverse':
-            self.algorithm = lambda *args: inverse_transform(self.algorithm_args['inv_cdf'], **self.rv.params) # algorithm_args = {'inv_cdf': -}
-        elif algorithm == 'composition':
-            self.algorithm = lambda *args: composition(**self.algorithm_args) # algorithm_args = {'sim_components': -, 'probabilties': -}
-        elif algorithm == 'rejection':
-            self.algorithm = lambda *args: rejection(self.rv, **self.algorithm_args) # algorithm_args = {'helper_rv': -, 'ratio_bound': -} (helper_rv must have pdf assigned)
-        elif algorithm == 'gamma':
-            self.algorithm = lambda *args: np.random.gamma(**self.rv.params)
-        else:
-            self.algorithm = algorithm
+        self.set_algorithm(algorithm, **algorithm_args)
 
     @timer
     def generate(self, sample_size, *args):
@@ -280,3 +269,21 @@ class Simulation(object):
             plt.savefig(file_path)
         if display:
             plt.show()
+
+    def set_algorithm(self, algorithm, **algorithm_args):
+        """
+        Sets self.algorithm
+        algorithm = a function that produces a single sample of target_rv
+        algorithm_args = dict of keyword arguments that are passed to algorithm
+        """
+        # set built-in algorithm for simulation/sampling if possible
+        if algorithm == 'inverse':
+            self.algorithm = lambda *args: inverse_transform(self.algorithm_args['inv_cdf'], **self.rv.params) # algorithm_args = {'inv_cdf': -}
+        elif algorithm == 'composition':
+            self.algorithm = lambda *args: composition(**self.algorithm_args) # algorithm_args = {'sim_components': -, 'probabilties': -}
+        elif algorithm == 'rejection':
+            self.algorithm = lambda *args: rejection(self.rv, **self.algorithm_args) # algorithm_args = {'helper_rv': -, 'ratio_bound': -} (helper_rv must have pdf assigned)
+        elif algorithm == 'gamma':
+            self.algorithm = lambda *args: np.random.gamma(**self.rv.params)
+        else:
+            self.algorithm = algorithm

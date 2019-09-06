@@ -25,8 +25,8 @@ sim.generate(sample_size)
 sim.compare(file_path = '../images/p16_1_{}.png'.format(sample_size))
 
 # second simulation
-helper_rv =  RVContinuous(support = [0.0, np.inf], pdf = lambda x: 1.0)
-helper_sim = Simulation(target_rv = helper_rv, algorithm = lambda *args: np.random.exponential())
-sim = Simulation(target_rv = rv, algorithm = 'rejection', helper_sim = helper_sim, ratio_bound = 4.0)
+helper_rv =  RVContinuous(support = [0.0, np.inf], pdf = lambda x: np.exp(-x/2.0))
+helper_sim = Simulation(target_rv = helper_rv, algorithm = lambda *args: np.random.exponential(scale = 2.0))
+sim.set_algorithm(algorithm = 'rejection', helper_sim = helper_sim, ratio_bound = 3.0)
 sim.generate(sample_size)
 sim.compare(file_path = '../images/p16_2_{}.png'.format(sample_size))
