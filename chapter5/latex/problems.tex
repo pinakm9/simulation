@@ -127,7 +127,7 @@ $Y = \sum_{i=1}^n s_i X_i$ = amount of total claim presented by all policyholder
 \newline
 $F(x) = $ cdf of $Y$
 \newline
-$A = $ a certain amount of money, for our purposes $A = \$50,000$
+$A = $ a certain amount of money, for our purposes $A = \$\,50,000$
 \newline
 $M$ = set of all binary $n$-tuples
 \newline
@@ -137,7 +137,8 @@ $P(Y > A|m) = $ probabilty conditioned on $s_i=m_i\;\forall i$ where $m\in M$.
 \newline
 $P(m) = $ probabilty that $s_i = m_i\;\forall i$ where $m\in M$.
 \newline
-$\Gamma(x, \mu, k) = $ gamma distribution that is the sum of $k$ identical exponential distributions with mean $\mu$
+$\Gamma(x, k, \mu) = $ cdf of gamma random variable that is the sum of $k$ identical exponential random variables with mean $\mu$
+\newline
 With our notations we need to compute the following.
 \begin{align*}
 F(A) =& \,P(Y \le A) = \sum_{m\in M}P(Y \le A| m)P(m) \\
@@ -145,8 +146,8 @@ F(A) =& \,P(Y \le A) = \sum_{m\in M}P(Y \le A| m)P(m) \\
 =& \sum_{k=1}^n\sum_{m\in M_k}P(Y \le A| m)p^k(1-p)^{n-k} \\
 =& \sum_{k=1}^n |M_k|p^k(1-p)^{n-k} P(Y \le A| m_k) ,\qquad m_k\in M_k \\
 =& \sum_{k=1}^n \binom{n}{k}p^k(1-p)^{n-k}P(Y \le A| m_k) \\
-=& \sum_{k=1}^n \binom{n}{k}p^k(1-p)^{n-k}\Gamma(A, \mu, k) \\
-=:& \sum_{k=1}^n p_{n,k}\Gamma(A, \mu, k)
+=& \sum_{k=1}^n \binom{n}{k}p^k(1-p)^{n-k}\Gamma(A, k, \mu) \\
+=:& \sum_{k=1}^n p_{n,k}\Gamma(A, k, \mu)
 \end{align*}
-$\sum_{k=1}^n p_{n,k} = 1$ and $p_{n,k} > 0$ which implies we can sample $Y$ using composition technique because we can already sample gamma distributions.
+$\sum_{k=1}^n p_{n,k} = 1$ and $p_{n,k} > 0$ which implies we can sample $Y$ using composition technique because we can already sample gamma distributions. $1000$ samples generated using composition technique sets the required probability at $12\% - 13\%$. We can also sample $Y$ by simulating $n$ Bernoulli trials and then simulating $s$ exponential random variables where $s = $ the number of successes in the Bernoulli trials. This straight-forward method sets the required probability at $10\%-12\%$. The actual value of the required probability $\approx 10.7\%$.
 \end{document}

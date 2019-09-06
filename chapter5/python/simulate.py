@@ -154,7 +154,7 @@ class RVContinuous(object):
 
     def set_unset_stats(self, stats = ()):
         """
-        Sets the unset statistics of the distribution using self.set_stats.
+        Sets only unset statistics of the distribution using self.set_stats.
         stats = list/tuple of unset statistics.
         In case stats = () (default), all unset statistics are set.
         """
@@ -243,7 +243,7 @@ class Simulation(object):
         self.mean = np.mean(self.samples)
         self.var = np.var(self.samples, ddof = 1) # unbiased estimator
 
-    def compare(self, file_path = None, display = True, target_cdf_pts = 100, inf_limits = [-10.0, 10.0]):
+    def compare(self, file_path = None, display = True, target_cdf_pts = 100):
         """
         Draws cdfs for target and simulation and sets self.ecdf.
         file_path is the location where the image file is saved, image file is not saved in case file_path = None (default).
@@ -252,7 +252,7 @@ class Simulation(object):
         inf_limits is a finite interval for np.linspace in case rv.pdf has unbounded support.
         """
         # compute target mean and variance if not already computed
-        self.rv.set_unset_stats()#('mean', 'var'))
+        self.rv.set_unset_stats(('mean', 'var'))
 
         # compute and plot simulated cdf
         self.ecdf = ECDF(self.samples)
@@ -260,8 +260,8 @@ class Simulation(object):
         plt.plot(self.ecdf.x, self.ecdf.y, label = 'simulation ($\mu$ = {:.4f}, $\sigma^2$ = {:.4f})'.format(self.mean, self.var))
 
         # fix limits for np.linspace in case rv.a or rv.b is unbounded
-        left_lim = inf_limits[0] if np.isinf(self.rv.a) else self.rv.a
-        right_lim = inf_limits[1] if np.isinf(self.rv.b) else self.rv.b
+        left_lim = self.ecdf.x[1] if np.isinf(self.rv.a) else self.rv.a
+        right_lim = self.ecdf.x[-1] if np.isinf(self.rv.b) else self.rv.b
 
         # plot target cdf
         x = np.linspace(left_lim, right_lim, target_cdf_pts, endpoint = True)

@@ -23,4 +23,4 @@ def inv_cdf(y, alpha, beta):
 rv = RVContinuous(support = [0.0, np.inf], cdf = target_cdf, alpha = alpha, beta = beta)
 sim = Simulation(target_rv = rv, algorithm = 'inverse', inv_cdf = inv_cdf)
 sim.generate(sample_size)
-sim.compare(file_path = '../images/p4_{}_{}_{}.png'.format(alpha, beta, sample_size), inf_limits = [0.0, 2.0])
+sim.compare(file_path = '../images/p4_{}_{}_{}.png'.format(alpha, beta, sample_size))

@@ -1,8 +1,11 @@
 from time import time
 
-# Timing wrapper
 def timer(func):
-	def new_func(*args,**kwargs):
+	"""
+	Timing wrapper for a generic function.
+	Prints the time spent inside the function to the output.
+	"""
+	def new_func(*args, **kwargs):
 		start = time()
 		val = func(*args,**kwargs)
 		end = time()
