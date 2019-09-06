@@ -150,4 +150,33 @@ F(A) =& \,P(Y \le A) = \sum_{m\in M}P(Y \le A| m)P(m) \\
 =:& \sum_{k=1}^n p_{n,k}\Gamma(A, k, \mu)
 \end{align*}
 $\sum_{k=1}^n p_{n,k} = 1$ and $p_{n,k} > 0$ which implies we can sample $Y$ using composition technique because we can already sample gamma distributions. $1000$ samples generated using composition technique sets the required probability at $12\% - 13\%$. We can also sample $Y$ by simulating $n$ Bernoulli trials and then simulating $s$ exponential random variables where $s = $ the number of successes in the Bernoulli trials. This straight-forward method sets the required probability at $10\%-12\%$. The actual value of the required probability $\approx 10.7\%$.
+
+\subsection*{Problem 12}
+$\underset{1\le i\le n}{\max} X_i$ has the distribution $\prod_{i=1}^n F_i(x)$ and $\underset{1\le i\le n}{\min} X_i$ has the distribution $1-\prod_{i=1}^n (1-F_i(x))$.
+
+\subsection*{Problem 14}
+\subsubsection*{(a)}
+Assuming $x\in[a, b]$,
+\begin{align*}
+  P(X\le x| a\le X\le b)
+  &= \frac{P(X\le x| a\le X\le b)}{P(a\le X\le b)} \\
+  &= \frac{P(a\le X\le x)}{P(a\le X\le b)} \\
+  &= \frac{G(x)-G(a)}{G(b)-G(a)} = F(x)
+\end{align*}
+\subsubsection*{(b)}
+Let $Y = X| a\le X\le b$. Density of $Y$ is given by
+\begin{align*}
+f(y) = \begin{cases}
+          \frac{g(y)}{G(b) - G(a)}, & \text{ if } a\le y\le b \\
+          0, & \text{ otherwise}
+      \end{cases}
+\end{align*}
+So in this case we can choose $c=\frac{1}{G(b)-G(a)}$. And a sample $X$ drawn from $G$ will be selected if the generated uniform random number $U$ satisfies
+\begin{align*}
+  U\le  \begin{cases}
+            \frac{f(X)}{cg(X)} = 1,  & \text{ if } a\le X\le b\\
+            0, & \text{ otherwise}
+        \end{cases}
+\end{align*}
+which implies $X$ is selected iff it lies in $[a, b]$.
 \end{document}

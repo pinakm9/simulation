@@ -186,14 +186,16 @@ def composition(sim_components, probabilties):
     """
     return sim_components[np.random.choice(len(sim_components), p = probabilties)].algorithm()
 
-def rejection(target_rv, helper_rv, ratio_bound):
+def rejection(target_rv, helper_sim, ratio_bound):
     """
     The accept-reject method for sampling.
-    Requires a target and a helper random variable and an upper bound for the ratio of their pdfs.
+    target_rv = target random variable.
+    helper_sim = simulation for helper random variable with pdf assigned.
+    rato_bound = an upper bound for the ratio of the pdfs.
     """
     while True:
-        sample = helper_rv.algorithm()
-        if np.random.uniform() <= target_rv.pdf(sample)/(ratio_bound*helper_rv.pdf(sample)):
+        sample = helper_sim.algorithm()
+        if np.random.uniform() <= target_rv.pdf(sample)/(ratio_bound*helper_sim.rv.pdf(sample)):
             return sample
 
 
@@ -226,7 +228,7 @@ class Simulation(object):
         elif algorithm == 'composition':
             self.algorithm = lambda *args: composition(**self.algorithm_args) # algorithm_args = {'sim_components': -, 'probabilties': -}
         elif algorithm == 'rejection':
-            self.algorithm = lambda *args: rejection(self.rv, **self.algorithm_args) # algorithm_args = {'helper_rv': -, 'ratio_bound': -}
+            self.algorithm = lambda *args: rejection(self.rv, **self.algorithm_args) # algorithm_args = {'helper_rv': -, 'ratio_bound': -} (helper_rv must have pdf assigned)
         elif algorithm == 'gamma':
             self.algorithm = lambda *args: np.random.gamma(**self.rv.params)
         else:
