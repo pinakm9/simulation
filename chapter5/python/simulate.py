@@ -28,8 +28,8 @@ class RVContinuous(object):
         # set support and pdf/cdf for known distributions
         if name == 'gamma':
             support = (0.0, np.inf)
-            cdf = lambda x, shape, scale: gamma.cdf(x/scale, shape)/scale
-            pdf = lambda x, shape, scale: gamma.pdf(x/scale, shape)/scale
+            cdf = lambda x, shape, scale: gamma.cdf(x, shape, scale = scale)
+            pdf = lambda x, shape, scale: gamma.pdf(x, shape, scale = scale)
 
         # assign basic attributes
         self.name = name # name of the random variable
@@ -191,7 +191,7 @@ def rejection(target_rv, helper_sim, ratio_bound):
     The accept-reject method for sampling.
     target_rv = target random variable.
     helper_sim = simulation for helper random variable with pdf assigned.
-    rato_bound = an upper bound for the ratio of the pdfs.
+    ratio_bound = an upper bound for the ratio of the pdfs.
     """
     while True:
         sample = helper_sim.algorithm()
@@ -224,13 +224,13 @@ class Simulation(object):
         self.set_algorithm(algorithm, **algorithm_args)
 
     @timer
-    def generate(self, sample_size, *args):
+    def generate(self, sample_size):
         """
         Generates a batch of samples using self.algorithm
         args are the arguments that are passed to self.algorithm ???
         """
         self.size = sample_size # number of samples to be collected
-        self.samples = [self.algorithm(*args) for i in range(self.size)] # container for the collected samples
+        self.samples = [self.algorithm() for i in range(self.size)] # container for the collected samples
         self.mean = np.mean(self.samples)
         self.var = np.var(self.samples, ddof = 1) # unbiased estimator
 
@@ -240,7 +240,6 @@ class Simulation(object):
         file_path is the location where the image file is saved, image file is not saved in case file_path = None (default).
         The plot is displayed on screen if display = True (default).
         target_cdf_pts is the number of points used to plot the target cdf.
-        inf_limits is a finite interval for np.linspace in case rv.pdf has unbounded support.
         """
         # compute target mean and variance if not already computed
         self.rv.set_unset_stats(('mean', 'var'))
