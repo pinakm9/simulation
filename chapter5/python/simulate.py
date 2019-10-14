@@ -16,14 +16,22 @@ class RVContinuous(object):
 
     def __init__(self, name = 'unknown', support = (0.0, 1.0), cdf = None, pdf = None, find_mean = None, find_var = None, **params):
         """
-        In case the random variable has a well-known distribution, providing the name of the random variable and
-        **params = parameters of the distribution will set all other arguments automatically.
-        Currently a known name can be anything in the list ['gamma']. Dafault is 'unknown'.
+        ---------
+        Arguments
+        ---------
         support = support of the pdf, default = (0.0, 1.0)
         find_mean = custom function for computing mean, accpets parameters of the distribution as **kwargs
         find_var = custom function for computing variance, accpets parameters of the distribution as **kwargs
         params = dict of keyword arguments that are passed to pdf, cdf and inv_cdf
+
+        -----
+        Notes
+        -----
         Either pdf or cdf is required for mean and variance computation. One of them can be omitted.
+        In case the random variable has a well-known distribution, providing the name of the random variable and
+        **params = parameters of the distribution will set all other arguments automatically.
+        Currently a known name can be anything in the list ['gamma']. Dafault is 'unknown'.
+
         """
         # set support and pdf/cdf for known distributions
         if name == 'gamma':
@@ -53,6 +61,9 @@ class RVContinuous(object):
 
     def set_params(self, **new_params):
         """
+        -----------
+        Description
+        -----------
         Resets parameters of the distribution to new_params.
         Passing only the parameters that need to be changed suffices.
         """
@@ -70,6 +81,9 @@ class RVContinuous(object):
 
     def compute_mean(self):
         """
+        -----------
+        Description
+        -----------
         Computes, sets and returns self.mean = expected value of the random variable.
         """
         # compute mean according to availability of pdf or cdf
@@ -105,6 +119,9 @@ class RVContinuous(object):
 
     def compute_var(self):
         """
+        -----------
+        Description
+        -----------
         Computes, sets and returns self.var = variance of the random variable.
         """
         # compute variance according to availability of pdf or cdf
@@ -140,9 +157,20 @@ class RVContinuous(object):
 
     def set_stats(self, stats = ()):
         """
+        -----------
+        Description
+        -----------
         Computes and sets the user-chosen statistics of the distribution using the easiest possible methods
         depending on availability of find_mean, find_var etc.
+
+        ---------
+        Arguments
+        ---------
         stats = list/tuple of statistic names to be computed.
+
+        -----
+        Notes
+        -----
         If the value is set to True, set_stats will try to compute the corresponding statistic.
         If stats = () (default), all statistics are computed.
         """
@@ -154,7 +182,14 @@ class RVContinuous(object):
 
     def set_unset_stats(self, stats = ()):
         """
+        -----------
+        Description
+        -----------
         Sets only unset statistics of the distribution using self.set_stats.
+
+        ---------
+        Arguments
+        ---------
         stats = list/tuple of unset statistics.
         In case stats = () (default), all unset statistics are set.
         """
@@ -165,6 +200,53 @@ class RVContinuous(object):
             if hasattr(self, stat):
                 stats_to_compute.append(stat)
         self.set_stats(stats_to_compute)
+
+
+########################################
+# Stochastic Process class definitions #
+########################################
+
+class SPContinuous(object):
+        """
+        This is a class for defining generic continuous random variables.
+        """
+
+        def __init__(self, name = 'unknown', support = (0.0, 1.0), cdf = None, pdf = None, find_mean = None, find_var = None, **params):
+            """
+            ---------
+            Arguments
+            ---------
+            support = support of the pdf, default = (0.0, 1.0)
+            find_mean = custom function for computing mean, accpets parameters of the distribution as **kwargs
+            find_var = custom function for computing variance, accpets parameters of the distribution as **kwargs
+            params = dict of keyword arguments that are passed to pdf, cdf and inv_cdf
+
+            -----
+            Notes
+            -----
+            Either pdf or cdf is required for mean and variance computation. One of them can be omitted.
+            In case the random variable has a well-known distribution, providing the name of the random variable and
+            **params = parameters of the distribution will set all other arguments automatically.
+            Currently a known name can be anything in the list ['gamma']. Dafault is 'unknown'.
+
+            """
+            # assign basic attributes
+            self.name = name # name of the random variable
+            self.a, self.b = support # left and right endpoints of support interval of pdf
+            self.params = params # parameters of pdf and cdf
+            if pdf is not None:
+                self.pdf_ = pdf # family of pdfs without parmeters specified
+                self.pdf = lambda x, t: self.pdf_(x, t, **self.params) # pdf with parameters specified
+            if cdf is not None:
+                self.cdf_ = cdf # family of cdfs without parmeters specified
+                self.cdf = lambda x: self.cdf_(x, t, **self.params) # cdf with parameters specified
+            if find_mean is not None:
+                self.find_mean_ = find_mean # family of find_means without parmeters specified
+                self.find_mean = lambda t: self.find_mean_(t, **self.params) # find_mean with parameters specified
+            if find_var is not None:
+                self.find_var_ = find_var # family of find_vars without parmeters specified
+                self.find_var = lambda t: self.find_var_(t, **self.params) # find_var with parameters specified)
+
 
 
 #############################################
@@ -188,7 +270,14 @@ def composition(sim_components, probabilties):
 
 def rejection(target_rv, helper_sim, ratio_bound):
     """
+    -----------
+    Description
+    -----------
     The accept-reject method for sampling.
+
+    ---------
+    Agruments
+    ---------
     target_rv = target random variable.
     helper_sim = simulation for helper random variable with pdf assigned.
     ratio_bound = an upper bound for the ratio of the pdfs.
@@ -211,6 +300,9 @@ class Simulation(object):
 
     def __init__(self, target_rv, algorithm, **algorithm_args):
         """
+        ---------
+        Arguments
+        ---------
         target_rv = random variable to simulate
         algorithm = a function that produces a single sample of target_rv
         algorithm_args = dict of keyword arguments that are passed to algorithm
@@ -226,6 +318,9 @@ class Simulation(object):
     @timer
     def generate(self, sample_size):
         """
+        -----------
+        Description
+        -----------
         Generates a batch of samples using self.algorithm
         args are the arguments that are passed to self.algorithm ???
         """
@@ -236,7 +331,14 @@ class Simulation(object):
 
     def compare(self, file_path = None, display = True, target_cdf_pts = 100):
         """
+        -----------
+        Description
+        -----------
         Draws cdfs for target and simulation and sets self.ecdf.
+
+        ---------
+        Arguments
+        ---------
         file_path is the location where the image file is saved, image file is not saved in case file_path = None (default).
         The plot is displayed on screen if display = True (default).
         target_cdf_pts is the number of points used to plot the target cdf.
@@ -246,8 +348,9 @@ class Simulation(object):
 
         # compute and plot simulated cdf
         self.ecdf = ECDF(self.samples)
-        plt.figure(figsize = (7,6))
-        plt.plot(self.ecdf.x, self.ecdf.y, label = 'simulation ($\mu$ = {:.4f}, $\sigma^2$ = {:.4f})'.format(self.mean, self.var))
+        fig = plt.figure(figsize = (7,6))
+        ax = fig.add_subplot(111)
+        ax.plot(self.ecdf.x, self.ecdf.y, label = 'simulation ($\mu$ = {:.4f}, $\sigma^2$ = {:.4f})'.format(self.mean, self.var))
 
         # fix limits for np.linspace in case rv.a or rv.b is unbounded
         left_lim = self.ecdf.x[1] if np.isinf(self.rv.a) else self.rv.a
@@ -256,22 +359,29 @@ class Simulation(object):
         # plot target cdf
         x = np.linspace(left_lim, right_lim, target_cdf_pts, endpoint = True)
         y = [self.rv.cdf(pt) for pt in x]
-        plt.plot(x, y, label = 'target ($\mu$ = {:.4f}, $\sigma^2$ = {:.4f})'.format(self.rv.mean, self.rv.var))
+        ax.plot(x, y, label = 'target ($\mu$ = {:.4f}, $\sigma^2$ = {:.4f})'.format(self.rv.mean, self.rv.var))
 
         # write textual info on the plot
-        plt.title('CDF vs ECDF')
-        plt.xlabel('x')
-        plt.legend()
+        ax.set_title('CDF vs ECDF')
+        ax.set_xlabel('x')
+        ax.legend()
 
         # save and display
         if file_path is not None:
-            plt.savefig(file_path)
+            fig.savefig(file_path)
         if display:
             plt.show()
 
     def set_algorithm(self, algorithm, **algorithm_args):
         """
+        -----------
+        Description
+        -----------
         Sets self.algorithm
+
+        ---------
+        Arguments
+        ---------
         algorithm = a function that produces a single sample of target_rv
         algorithm_args = dict of keyword arguments that are passed to algorithm
         """
