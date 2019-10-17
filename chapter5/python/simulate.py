@@ -25,11 +25,6 @@ class RVContinuous(object):
         find_var = custom function for computing variance, accpets parameters of the distribution as **kwargs
         params = dict of keyword arguments that are passed to pdf, cdf and inv_cdf
 
-        ------
-        Return
-        ------
-        None
-
         -----
         Notes
         -----
@@ -319,11 +314,6 @@ class Simulation(object):
         target_rv = random variable to simulate
         algorithm = a function that produces a single sample of target_rv
         algorithm_args = dict of keyword arguments that are passed to algorithm
-
-        ------
-        Return
-        ------
-        None
         """
         # assign basic attributes
         self.rv = target_rv # random variable to simulate
@@ -421,15 +411,20 @@ class Simulation(object):
         """
         # set built-in algorithm for simulation/sampling if possible
         if algorithm == 'inverse':
-            self.algorithm = lambda *args: inverse_transform(self.algorithm_args['inv_cdf'], **self.rv.params) # algorithm_args = {'inv_cdf': -}
+            algorithm = lambda *args: inverse_transform(self.algorithm_args['inv_cdf'], **self.rv.params) # algorithm_args = {'inv_cdf': -}
         elif algorithm == 'composition':
-            self.algorithm = lambda *args: composition(**self.algorithm_args) # algorithm_args = {'sim_components': -, 'probabilties': -}
+            algorithm = lambda *args: composition(**self.algorithm_args) # algorithm_args = {'sim_components': -, 'probabilties': -}
         elif algorithm == 'rejection':
-            self.algorithm = lambda *args: rejection(self.rv, **self.algorithm_args) # algorithm_args = {'helper_rv': -, 'ratio_bound': -} (helper_rv must have pdf assigned)
+            algorithm = lambda *args: rejection(self.rv, **self.algorithm_args) # algorithm_args = {'helper_rv': -, 'ratio_bound': -} (helper_rv must have pdf assigned)
         elif algorithm == 'gamma':
-            self.algorithm = lambda *args: np.random.gamma(**self.rv.params)
-        else:
-            self.algorithm = algorithm
+            algorithm = lambda *args: np.random.gamma(**self.rv.params)
+
+        def algorithm_(*args):
+            self.current_value = algorithm(*args)
+            return self.current_value
+
+        self.algorithm = lambda *args: algorithm_(*args)
+
 
 
 ########################################
@@ -451,18 +446,12 @@ class StochasticProcess(object):
             find_var = custom function for computing variance, accpets parameters of the distribution as **kwargs
             params = dict of keyword arguments that are passed to pdf, cdf and inv_cdf
 
-            ------
-            Return
-            ------
-            None
-
             -----
             Notes
             -----
             Either pdf or cdf is required for mean and variance computation. One of them can be omitted.
             In case the random variable has a well-known distribution, providing the name of the random variable and
             **params = parameters of the distribution will set all other arguments automatically.
-
             """
             # assign basic attributes
             self.name = name # name of the random variable
